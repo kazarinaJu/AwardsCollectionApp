@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CustomAwardView: View {
+    @State private var trianglesAreRotating = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -46,7 +47,7 @@ struct CustomAwardView: View {
                         endPoint: UnitPoint(x: 1, y: 1)
                     )
                 )
-                ForEach(0..<15) { iteration in
+                ForEach(0..<12) { iteration in
                     Path { path in
                         path.move(to: CGPoint(x: quarter, y: middle))
                         path.addLine(to: CGPoint(x: 0, y: quarter * 1.5))
@@ -61,7 +62,7 @@ struct CustomAwardView: View {
                     )
                     .rotationEffect(.degrees(Double(iteration) * 30))
                     .shadow(color: .yellow.opacity(0.5), radius: 15)
-                    
+                    .rotationEffect(trianglesAreRotating ? .degrees(360) : .degrees(0))
                 }
                 
                 CircleView(
@@ -76,6 +77,11 @@ struct CustomAwardView: View {
                     strokeColor: .indigo,
                     strokeLineWidth: 2
                 )
+            }
+        }
+        .onAppear {
+            withAnimation(.linear(duration: 5).repeatForever(autoreverses: false)) {
+                trianglesAreRotating = true
             }
         }
     }
